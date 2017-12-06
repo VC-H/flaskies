@@ -4,38 +4,51 @@
 """
 
 flaskies.hello
---------------
-
-The traditional ``'hello world'`` with slightly different aims
-
-* setting up test cases using :meth:`flask.app.testclient`;
-* test out :meth:`flask.escape` and :meth:`flask.Markup`;
+==============
 
 :Copyright: © 2017 by Victor Hui.
 :Licence: BSD-3-Clause (see LICENSE for more details)
+
+``'hello world'`` with :meth:`flask.escape` and :meth:`flask.Markup`
+--------------------------------------------------------------------
+
+* create a :class:`Flask.Blueprint` :py:obj:`hello`
+
+.. code-block:: python
+
+   hello = Blueprint('hello',import_name=__name__)
+
+* define two :py:obj:`view_func`'s:
+
+.. literalinclude:: ../hello.py
+   :pyobject: say
+
+.. literalinclude:: ../hello.py
+   :pyobject: say_escaped
+
+* setting up test cases using :meth:`flask.app.testclient`;
 
 -----
 """
 
 from __future__ import unicode_literals
-from flask import Flask,Blueprint,Markup,escape
+import sys, re
+from flask import Flask, Blueprint, Markup, escape
 
 hello = Blueprint('hello',import_name=__name__)
 
 @hello.route('/hello')
 @hello.route('/hello/<friends>')
 def say(friends='world'):
-    "``/hello``/`<friends>` for direct pass of `friends` to ``'hello {}!'``"
     return 'hello {}!'.format(friends)
 
 @hello.route('/Hello')
 @hello.route('/Hello/<friends>')
 def say_escaped(friends='World'):
-    "``/Hello``/`<friends>` for escaped pass of `friends` to ``'Hello {}!'``"
     return 'Hello {}!'.format(escape(friends))
 
 
-def create_app_hello():
+def create_app_hello(app=None):
     """return the ``app`` registered with the ``hello blueprint``
 
     >>> app = create_app_hello()
@@ -78,11 +91,20 @@ def create_app_hello():
     ...  Markup('<em>escaped</em>'))
     True
 
+    >>> (re_findall_testcases(create_app_hello.__doc__) ==
+    ... ['/hello', '/hello/there', '/hello/<friends>', '/Hello/<friends>'])
+    True
 
     """
-    app = Flask(__name__)
+    if app is None:
+        app = Flask(__name__)
     app.register_blueprint(hello)
     return app
+
+re_findall_testcases = re.compile(
+    """>>> got.* = testclient.get\('(.*)'\)"""
+    ).findall
+
 
 
 if __name__ == '__main__':

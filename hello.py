@@ -6,19 +6,28 @@
 flaskies.hello
 ==============
 
-:Copyright: © 2017 by Victor Hui.
-:Licence: BSD-3-Clause (see LICENSE for more details)
+``'hello world'`` examples
+--------------------------
 
-``'hello world'`` with :meth:`flask.escape` and :meth:`flask.Markup`
---------------------------------------------------------------------
+.. ::
+  Copyright: (c) 2017 by Victor Hui.
+  Licence: BSD-3-Clause (see LICENSE for more details)
 
-* create a :class:`Flask.Blueprint` :py:obj:`hello`
+* test running:
+
+  - ``GET`` method of :meth:`flask.request`
+  - :meth:`flask.escape`
+  - :meth:`flask.Markup`
+  - :meth:`Flask.testclient`
+  - :meth:`flask.render_template`
+
+* create a :py:obj:`hello` :class:`Blueprint`
 
 .. code-block:: python
 
    hello = Blueprint('hello',import_name=__name__)
 
-* define two :py:obj:`view_func`'s:
+* define three :py:obj:`view_func`'s:
 
 .. literalinclude:: ../hello.py
    :pyobject: say
@@ -26,14 +35,18 @@ flaskies.hello
 .. literalinclude:: ../hello.py
    :pyobject: say_escaped
 
-* setting up test cases using :meth:`flask.app.testclient`;
+.. literalinclude:: ../hello.py
+   :pyobject: viewtestcases
+
 
 -----
 """
 
 from __future__ import unicode_literals
 import sys, re
-from flask import Flask, Blueprint, Markup, escape
+from flask import (
+    Flask, Blueprint, render_template, url_for,
+    escape, Markup)
 
 hello = Blueprint('hello',import_name=__name__)
 
@@ -47,12 +60,36 @@ def say(friends='world'):
 def say_escaped(friends='World'):
     return 'Hello {}!'.format(escape(friends))
 
+re_findall_testcases = re.compile(
+    """>>> got.* = testclient.get\('(.*)'\)"""
+    ).findall
 
-def create_app_hello(app=None):
-    """return the ``app`` registered with the ``hello blueprint``
+def href(url,descr=None):
+    """return ``Markup('<a href="{0}">{1}</a>')`` for (`url, descr`);
 
-    >>> app = create_app_hello()
-    >>> testclient = app.test_client()
+    >>> assert href("/") == Markup('<a href="/">/</a>')
+
+    """
+    if descr is None:
+        descr = url
+    return Markup('<a href="{0}">{1}</a>'.format(url,escape(descr)))
+
+def gettestcases():
+    """return testcases used here in the doctest;
+
+    >>> testapp = Flask(__name__)
+    >>> testapp.register_blueprint(hello)
+    >>> testclient = testapp.test_client()
+
+    >>> with testapp.test_request_context():
+    ...     testcases = gettestcases()
+    >>> testcases == [
+    ...     '/hello',
+    ...     '/hello/there',
+    ...     '/hello/<friends>',
+    ...     '/Hello/<friends>'
+    ... ]
+    True
 
     * basic tests:
 
@@ -91,20 +128,18 @@ def create_app_hello(app=None):
     ...  Markup('<em>escaped</em>'))
     True
 
-    >>> (re_findall_testcases(create_app_hello.__doc__) ==
-    ... ['/hello', '/hello/there', '/hello/<friends>', '/Hello/<friends>'])
-    True
-
     """
-    if app is None:
-        app = Flask(__name__)
-    app.register_blueprint(hello)
-    return app
+    url_prefix = url_for('hello.viewtestcases')[:-len('/testcases')]
+    testcases= re_findall_testcases(gettestcases.__doc__)
+    return [ url_prefix + testcase for testcase in testcases ]
 
-re_findall_testcases = re.compile(
-    """>>> got.* = testclient.get\('(.*)'\)"""
-    ).findall
 
+@hello.route('/testcases')
+def viewtestcases():
+    hrefs = [ (href(url),) for url in gettestcases() ]
+    return render_template(
+        'tableview.htm',caption='hello',
+        tables=[dict(records=hrefs,headings=('testcases',)),])
 
 
 if __name__ == '__main__':
@@ -112,9 +147,13 @@ if __name__ == '__main__':
     import sys
     import doctest
 
+    app = Flask(__name__)
+    app.config['TEMPLATES_AUTO_RELOAD'] = True
+    app.register_blueprint(hello)
+    app.add_url_rule("/",endpoint='hello.viewtestcases')
+
     if sys.argv[0] != "":
-        app = create_app_hello()
         app.run(debug=True,use_reloader=True)
     else:
         print(doctest.testmod(optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
-        exec(doctest.script_from_examples(create_app_hello.__doc__))
+        exec(doctest.script_from_examples(gettestcases.__doc__))

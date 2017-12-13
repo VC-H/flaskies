@@ -1,0 +1,29 @@
+{# -*- jinja2 -*-
+:Copyright: © 2017 by Victor Hui.
+:Licence: BSD-3-Clause (see LICENSE for more details)
+#}
+{%- extends "base.htm" -%}
+
+{% block links %}
+  <link rel="stylesheet" href="/static/css/basic.css"></link>
+{%- endblock %}
+
+{% block main %}
+<table>
+  <caption>{{caption}}</caption>
+  {%- for table in tables %}
+  <thead>
+    <tr>{%- for heading in table.headings %}
+      <th>{{heading}}</th>{%- endfor %}
+    </tr>
+  </thead>
+  <tbody>
+  {%- for record in table.records %}
+    <tr>{%- for item in record %}
+      <td>{{item}}</td>{%- endfor %}
+    </tr>
+  {%- endfor %}
+  </tbody>
+  {%- endfor %}
+</table>
+{%- endblock %}

@@ -1,0 +1,18 @@
+{# -*- jinja2 -*-
+:Copyright: © 2017 by Victor Hui.
+:Licence: BSD-3-Clause (see LICENSE for more details)
+#}
+{%- extends "base.htm" -%}
+
+{% block links %}
+  <link rel="stylesheet" href="/static/css/basic.css"></link>
+  <link rel="stylesheet" href="/static/css/source.css"></link>
+{%- endblock %}
+
+{% block main %}
+<figure>
+<figurecaption>{{template}}</figurecaption>
+{%- if source is defined %}
+{{ source|safe }}{%- endif %}
+</figure>
+{%- endblock %}

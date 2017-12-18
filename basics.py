@@ -21,7 +21,7 @@ flaskies.basics
 
 * Basics of :class:`Flask` application
 
-  - :meth:`rulestable` shows a table of rule map and
+  - :meth:`rulesmap` shows a table of rule map and
     the templates used
   - :meth:`stacktables` shows a table of libraries and
     modules of the call stack
@@ -36,7 +36,7 @@ flaskies.basics
 * define two :py:obj:`view_func`'s:
 
 .. literalinclude:: ../basics.py
-   :pyobject: rulestable
+   :pyobject: rulesmap
 
 .. literalinclude:: ../basics.py
    :pyobject: stacktable
@@ -71,7 +71,7 @@ def getendtemplates():
     >>> with testapp.app_context():
     ...     templatesdict = getendtemplates()
     >>> sorted(templatesdict.items()) == [
-    ...     ('basics.rulestable',['tableview.htm']),
+    ...     ('basics.rulesmap',['tableview.htm']),
     ...     ('basics.stacktable',['tableview.htm']),
     ...     ('static',[])]
     True
@@ -207,8 +207,8 @@ def getstack(skip=0,ignorelibdir=False):
 
 basics = Blueprint('basics',__name__)
 
-@basics.route('/rulestable')
-def rulestable():
+@basics.route('/rulesmap')
+def rulesmap():
     return render_template(
         'tableview.htm', caption = 'url_map',
         tables = [getrules(),])
@@ -230,7 +230,7 @@ if __name__ == '__main__':
     app.config['TEMPLATES_AUTO_RELOAD'] = True
     app.register_blueprint(templateview)
     app.register_blueprint(basics)
-    app.add_url_rule("/",endpoint='basics.rulestable')
+    app.add_url_rule("/",endpoint='basics.rulesmap')
 
     if sys.argv[0] != "":
         app.run(debug=True,use_reloader=True)

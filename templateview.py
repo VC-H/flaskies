@@ -178,10 +178,10 @@ lexer = HtmlLexer()
 formatter = HtmlFormatter(cssclass='source')
 templateview = Blueprint('templateview',__name__)
 
-@templateview.route('/templatestable')
+@templateview.route('/templates')
 def listall():
     hrefs = [
-        (href(url_for('.view',template=t)),)
+        (href(url_for('.view',template=t),t),)
         for t in getalltemplates() ]
     return render_template(
         'tableview.htm',caption='templates',

@@ -106,7 +106,7 @@ def gettestcases():
     >>> testclient.get('/hello/')
     <Response streamed [404 NOT FOUND]>
 
-    * :meth:`escape` and not, rules are *case sensitive*!
+    * :meth:`flask.escape` and not, rules are *case sensitive*!
 
     >>> got = testclient.get('/hello/<friends>')
     >>> assert got.status == '200 OK'
@@ -116,7 +116,7 @@ def gettestcases():
     >>> assert got.status == '200 OK'
     >>> assert got.get_data(as_text=True) == 'Hello &lt;friends&gt;!'
 
-    * :meth:`escape` and :meth:`Markup`:
+    * :meth:`flask.escape` and :meth:`flask.Markup`:
 
     >>> (escape('<em>escaped</em>') ==
     ...  Markup(u'&lt;em&gt;escaped&lt;/em&gt;') ==

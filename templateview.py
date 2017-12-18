@@ -23,8 +23,8 @@ Test the templates used in flaskies
 
 * re-used:
 
-  - :meth:`hello.href`
-  - :meth:`basics.getalltemplates`
+  - :func:`basics.getalltemplates`
+  - :func:`basics.href`
 
 * define two :py:obj:`view_func`'s:
 
@@ -171,8 +171,7 @@ from flask import (
     Flask, Blueprint, render_template,
     current_app, request, url_for,
     Markup)
-from basics import getalltemplates
-from hello import href
+from basics import getalltemplates, href
 
 lexer = HtmlLexer()
 formatter = HtmlFormatter(cssclass='source')

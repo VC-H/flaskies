@@ -21,17 +21,17 @@ flaskies.basics
 
 * Basics of :class:`Flask` application
 
-  - :meth:`rulesmap` shows a table of rule map and
+  - :func:`rulesmap` shows a table of rule map and
     the templates used
-  - :meth:`stacktables` shows a table of libraries and
+  - :func:`stacktables` shows a table of libraries and
     modules of the call stack
   - useful to work with :py:obj:`templateview` :class:`Blueprint`
 
 * re-used:
 
-  - :meth:`hello.href`
-  - :meth:`templateview.view`
-  - :meth:`templateview.listall`
+  - :func:`templateview.view`
+  - :func:`templateview.listall`
+  - duplicated :func:`hello.href` for :func:`href`
 
 * define two :py:obj:`view_func`'s:
 
@@ -50,13 +50,22 @@ from flask import (
     Flask, Blueprint, render_template, current_app, url_for,
     escape, Markup)
 from jinja2 import meta
-from hello import href
 
 re_sub_rule_variable = re.compile(
     """<[^/]+>[/]*""").sub
 re_findall_templates = re.compile(
     """[(\s]render_template\s*\(\s*['"](.+?)['"]""",
     flags=re.DOTALL).findall # apply to inspect.getsource(viewfunction)
+
+def href(url,descr=None):
+    """return ``Markup('<a href="{0}">{1}</a>')`` for (`url, descr`);
+
+    >>> assert href("/") == Markup('<a href="/">/</a>')
+
+    """
+    if descr is None:
+        descr = url
+    return Markup('<a href="{0}">{1}</a>'.format(url,escape(descr)))
 
 def getendtemplates():
     """return a :py:obj:`dict` of :data:`[(endpoint,templates),...]`;

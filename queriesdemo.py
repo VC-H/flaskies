@@ -21,8 +21,8 @@ Demo ``request.args`` handlings in :mod:`jinja2` templates
 
 * re-used
 
-  - :meth:`hello.href`
-  - :meth:`hello.re_findall_testcases`
+  - :func:`hello.href`
+  - :func:`hello.re_findall_testcases`
 
 * create a :py:obj:`queriesdemo` :class:`Blueprint`
 

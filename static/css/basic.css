@@ -14,3 +14,5 @@ caption, figurecaption {
 
 figurecaption { display: block; }
 figure { font-family: monospace; margin: 0; width: 80ch; }
+
+a { padding: 0; }

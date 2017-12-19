@@ -10,3 +10,4 @@ Table of Contents
    queriesdemo
    templateview
    basics
+   attrsview

@@ -14,7 +14,7 @@ coverage:
 	python -m coverage report -m
 
 uml:
-	pyreverse -o png -p flaskies --ignore=testall.py .
+	pyreverse -o png -p flaskies --ignore=testall.py,tmp .
 	\rm -f classes_flaskies.png
 	\mv -f packages_flaskies.png sphinx/
 

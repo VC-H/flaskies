@@ -2,6 +2,13 @@
 SPHINXBUILD   = python -msphinx
 BUILDDIR      = _build
 
+all:
+	@echo
+	@echo "target options:"
+	@echo
+	@grep "^\S*:" ./Makefile | sed -e "s/^\(.*\):\(.*\)$$/  \1:\2/g"
+	@echo
+
 packages_flaskies.png:
 	( cd .. ; make uml )
 

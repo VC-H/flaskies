@@ -224,14 +224,10 @@ def viewcontext(keypath=""):
     return render_template_string('{{ ' + context + '}}')
 
 
-if __name__ == '__main__':
-
-    import sys
-    import doctest
-    from flask import Flask
+def create_attrsview_app():
+    """app factory"""
     from basics import basics
     from templateview import templateview
-
     app = Flask(__name__)
     app.config['TEMPLATES_AUTO_RELOAD'] = True
     attrsview_routes('Primitives',Primitives)
@@ -239,7 +235,15 @@ if __name__ == '__main__':
     app.register_blueprint(templateview)
     app.register_blueprint(basics)
     app.add_url_rule("/",endpoint='basics.rulesmap')
+    return app
 
+
+if __name__ == '__main__':
+
+    import sys
+    import doctest
+
+    app = create_attrsview_app()
     if sys.argv[0] != "":
         app.run(debug=True,use_reloader=True)
     else:

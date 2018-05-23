@@ -47,9 +47,10 @@ flaskies.basics
 from __future__ import print_function, unicode_literals
 import sys, os, re, traceback, inspect
 from flask import (
-    Flask, Blueprint, render_template, current_app, url_for,
+    Flask, Blueprint, render_template, current_app, request, url_for,
     escape, Markup)
 from jinja2 import meta
+
 
 re_sub_rule_variable = re.compile(
     """<[^/]+>[/]*""").sub
@@ -229,18 +230,23 @@ def stacktable():
         tables = [getstack(skip=0),])
 
 
-if __name__ == '__main__':
-
-    import sys
-    import doctest
+def create_basics_app():
+    """app factory"""
     from templateview import templateview
-
     app = Flask(__name__)
     app.config['TEMPLATES_AUTO_RELOAD'] = True
     app.register_blueprint(templateview)
     app.register_blueprint(basics)
     app.add_url_rule("/",endpoint='basics.rulesmap')
+    return app
 
+
+if __name__ == '__main__':
+
+    import sys
+    import doctest
+
+    app = create_basics_app()
     if sys.argv[0] != "":
         app.run(debug=True,use_reloader=True)
     else:

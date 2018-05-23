@@ -142,16 +142,21 @@ def viewtestcases():
         tables=[dict(records=hrefs,headings=('testcases',)),])
 
 
+def create_hello_app():
+    """app factory"""
+    app = Flask(__name__)
+    app.config['TEMPLATES_AUTO_RELOAD'] = True
+    app.register_blueprint(hello)
+    app.add_url_rule("/",endpoint='hello.viewtestcases')
+    return app
+
+
 if __name__ == '__main__':
 
     import sys
     import doctest
 
-    app = Flask(__name__)
-    app.config['TEMPLATES_AUTO_RELOAD'] = True
-    app.register_blueprint(hello)
-    app.add_url_rule("/",endpoint='hello.viewtestcases')
-
+    app = create_hello_app()
     if sys.argv[0] != "":
         app.run(debug=True,use_reloader=True)
     else:

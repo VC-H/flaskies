@@ -204,16 +204,21 @@ def viewtestcases():
         tables=[table,table_unsafecases])
 
 
+def create_queriesdemo_app():
+    """app factory"""
+    app = Flask(__name__)
+    app.config['TEMPLATES_AUTO_RELOAD'] = True
+    app.register_blueprint(queriesdemo)
+    app.add_url_rule("/",endpoint='queriesdemo.viewtestcases')
+    return app
+
+
 if __name__ == '__main__':
 
     import sys
     import doctest
 
-    app = Flask(__name__)
-    app.config['TEMPLATES_AUTO_RELOAD'] = True
-    app.register_blueprint(queriesdemo)
-    app.add_url_rule("/",endpoint='queriesdemo.viewtestcases')
-
+    app = create_queriesdemo_app()
     if sys.argv[0] != "":
         app.run(debug=True,use_reloader=True)
     else:

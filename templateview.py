@@ -196,16 +196,21 @@ def view(template='base.htm'):
         'templateview.htm',source=show.strip(),template=template)
 
 
+def create_templateview_app():
+    """app factory"""
+    app = Flask(__name__)
+    app.config['TEMPLATES_AUTO_RELOAD'] = True
+    app.register_blueprint(templateview)
+    app.add_url_rule("/",endpoint='templateview.listall')
+    return app
+
+
 if __name__ == '__main__':
 
     import sys
     import doctest
 
-    app = Flask(__name__)
-    app.config['TEMPLATES_AUTO_RELOAD'] = True
-    app.register_blueprint(templateview)
-    app.add_url_rule("/",endpoint='templateview.listall')
-
+    app = create_templateview_app()
     if sys.argv[0] != "":
         app.run(debug=True,use_reloader=True)
     else:

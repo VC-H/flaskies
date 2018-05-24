@@ -1,8 +1,9 @@
 flaskies
 ========
 
-.. _flaskies: https://github.com/vc-h/flaskies
 .. _flask: http://flask.pocoo.org/
+.. _flaskies: https://github.com/vc-h/flaskies
+.. _wiki: https://github.com/VC-H/flaskies/wiki
 
 Some flask <http://flask.pocoo.org>
 blueprints and applications for introspections.
@@ -12,8 +13,8 @@ blueprints and applications for introspections.
 * individual module could be placed side-by-side with other `flask`_ applications
 * `flaskies`_, *perhaps*, is not intended to be a `python` package
 
-Screenshots
------------
+Screenshots (`Wiki`_ for more)
+------------------------------
 
 .. image:: https://github.com/VC-H/flaskies/wiki/attrsview.png
 

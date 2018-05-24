@@ -7,30 +7,16 @@ flaskies
 Some flask <http://flask.pocoo.org>
 blueprints and applications for introspections.
 
-* `flaskies`_ has a flat file organzation structure:
+* `flaskies`_ has a flat file organzation structure
+* each module is a standalone app of a blueprint
+* individual module could be placed side-by-side with other `flask`_ applications
+* `flaskies`_, *perhaps*, is not intended to be a `python` package
 
-  - `flaskies`_ could be placed side-by-side with other `flask`_ applications
-  - most probably, `flaskies`_ is not intended to be a `python` package
+Screenshots
+-----------
 
-* `flaskies`_ :samp:`{modules}`, each implements:
+.. image:: https://github.com/VC-H/flaskies/wiki/attrsview.png
 
-  - an instance of :class:`flask.Blueprint`, e.g.
+.. image:: https://github.com/VC-H/flaskies/wiki/current_app.png
 
-    .. code-block:: python
-
-       module = Blueprint('module',__name__)
-
-  - the :samp:`{module}` is executable
-
-  - the ``'__main__'`` block runs a test server
-    registered with the `blueprint`, e.g.
-
-    .. code-block:: python
-
-       if __name__ == '__main__':
-           app = Flask(__nam__)
-           app.register_blueprint(module)
-           app.run(debug=True,use_reloader=True)
-
-  - :py:mod:`doctest` to perform tests
-  - :py:mod:`sphinx` :py:mod:`autodoc` to compile the documentation
+.. image:: https://github.com/VC-H/flaskies/wiki/tableview.png

@@ -11,3 +11,4 @@ Table of Contents
    templateview
    basics
    attrsview
+   cookiesman

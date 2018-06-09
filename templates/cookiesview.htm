@@ -1,0 +1,78 @@
+{# -*- jinja2 -*-
+Copyright: (c) 2017-2018 by Victor Hui,
+Licence: BSD-3-Clause (see LICENSE for more details)
+#}
+{%- extends "base.htm" -%}
+
+
+{% block links %}
+  <link rel="stylesheet" href="/static/css/basic.css"></link>
+{%- endblock %}
+
+
+{% block scripts %}
+  <script src="static/js/cookiesman.js"></script>
+  <script>
+    window.onload = function() { cookiesMan.exec(); }
+  </script>
+{%- endblock %}
+
+
+{% block styles %}
+  <style>
+    /* overriding some definitions in basic.css */
+    tbody tr * { margin: 0; padding: 0; }
+    tr:last-child>td { border-bottom: 0 !important; }
+    /* td { border-bottom-style: inset; } */
+    td { border-bottom: 1px inset #ddd; }
+    td * { font-family: monospace; }
+    td.value, td#new, td.token  { border: 0; margin: 0; }
+    td.value, td.token { padding-right: 0.5ch; }
+    .value { width: 64ch; }
+    .value input { width: 100%; }
+    .token * { color: #999; width: 100%; }
+  </style>
+{%- endblock %}
+
+
+{% block main %}
+<form action="{{request.path}}" method="POST">
+<table>
+  <caption> cookies </caption>
+  <thead><tr>
+      <th>http</th>
+      <th>key</th>
+      <th>value</th>
+  </tr></thead>
+  <tbody>
+  {%- if form is defined %}
+  {%- for field in form|
+    selectattr('type','equalto','FormField')|
+    rejectattr('id','equalto','new') %}
+    <tr class="nohover cookie">
+      <td>{{field.form.http}}</td>
+      <td>{{field.label}}</td>
+      <td class="value">{{field.form.value}}</td>
+    </tr>
+  {%- endfor %}
+  <tr class="nohover">
+    <td>{{form.new.form.http}}</td>
+    <td id="new">{{form.new.form.name}}</td>
+    <td class="value">{{form.new.form.value}}</td>
+  </tr>
+  <tr class="nohover" id="post">
+    <td><input type=submit value="POST"></td>
+  </tr>
+  {%- if 'WTF_CSRF_ENABLED' in config and config.WTF_CSRF_ENABLED %}
+  <tr class="nohover"><td colspan=3 class="token">
+      <input name="csrf_token" value="{{csrf_token()}}" readonly></td>
+  </td></tr>
+  <tr class="nohover"><td colspan=3 class="token">
+      <span>csrf_token</span>
+  </td></tr>
+  {%- endif %}
+  </tbody>
+</table>
+{%- endif %}
+</form>
+{%- endblock %}

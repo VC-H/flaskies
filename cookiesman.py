@@ -45,7 +45,6 @@ Tests
 
 * setting up the tests with CSRF
 
->>> from flask import current_app
 >>> from flask_wtf.csrf import generate_csrf
 >>> testapp = Flask(__name__)
 >>> testapp.testing = testapp.config['TESTING'] = True
@@ -67,6 +66,7 @@ Tests
 >>> assert len(cookies) == 1
 >>> sessioncookie = cookies[0]
 >>> assert sessioncookie.name == 'session'
+>>> assert sessioncookie.value != ""
 >>> assert sessioncookie.domain == 'localhost.local'
 >>> assert sessioncookie.path == '/'
 
@@ -78,6 +78,16 @@ Tests
 ...     list(client.cookie_jar) == cookies
 <Response streamed [200 OK]>
 True
+
+* verify another client has a different session cookie
+
+>>> with testapp.test_client() as client2:
+...     client2.get('/cookiesview')
+...     cookies2 = list(client2.cookie_jar)
+...     assert len(cookies2) == 1
+...     assert cookies2[0].name == 'session'
+...     assert cookies2[0].value != sessioncookie.value
+<Response streamed [200 OK]>
 
 * define an emulation of :meth:`CookiesManForm.dynbuild` for the tests
 

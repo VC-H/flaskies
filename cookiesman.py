@@ -162,7 +162,8 @@ True
 
 """
 
-
+from __future__ import print_function, unicode_literals
+from six import string_types
 import sys
 from flask import (
     Flask, Blueprint, request, make_response, render_template,

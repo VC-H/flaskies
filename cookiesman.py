@@ -95,7 +95,7 @@ True
 ...     # require request context
 ...     data = dict(csrf_token=generate_csrf())
 ...     for cookie in cookies:
-...         key = md5(cookie.name).hexdigest()
+...         key = md5(cookie.name.encode()).hexdigest()
 ...         data[key + '-name'] = cookie.name
 ...         data[key + '-value'] = cookie.value
 ...         data[key + '-http'] = 'HttpOnly' in cookie._rest
@@ -126,7 +126,7 @@ False
 >>> with testapp.app_context():
 ...     client.get('/cookiesview')
 ...     data = dynbuild(client.cookie_jar)
-...     key = md5("a").hexdigest()
+...     key = md5(b"a").hexdigest()
 ...     data[key + '-value'] = "b+"
 ...     data[key + '-http'] = True
 ...     client.post('/cookiesview',data=data,follow_redirects=True)
@@ -148,7 +148,7 @@ True
 >>> with testapp.app_context():
 ...     client.get('/cookiesview')
 ...     data = dynbuild(client.cookie_jar)
-...     key = md5("a").hexdigest()
+...     key = md5(b"a").hexdigest()
 ...     data[key + '-value'] = ""
 ...     client.post('/cookiesview',data=data,follow_redirects=True)
 <Response streamed [200 OK]>
@@ -188,7 +188,7 @@ class CookiesManForm(FlaskForm):
         class DynCookiesManForm(CookiesManForm):
             new = FormField(NewCookieForm)
         for name,value in request.cookies.items():
-            key = md5(name).hexdigest()
+            key = md5(name.encode()).hexdigest()
             default = dict(value=value,http=False)
             formfield = FormField(CookieForm,label=name,default=default)
             setattr(DynCookiesManForm,key,formfield)
@@ -205,7 +205,7 @@ class CookiesManForm(FlaskForm):
 
     def update_cookies(self,request,response):
         for name,value in request.cookies.items():
-            key = md5(name).hexdigest()
+            key = md5(name.encode()).hexdigest()
             formfield = self.data.get(key)
             formvalue = formfield.get('value',"")
             if formvalue == "" or formvalue.isspace():

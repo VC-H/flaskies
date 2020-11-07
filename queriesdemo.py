@@ -71,7 +71,7 @@ def getargs():
 def gettestcases():
     """return a table of testcases used in the doctest;
 
-    >>> from werkzeug import ImmutableMultiDict
+    >>> from werkzeug.datastructures import ImmutableMultiDict
     >>> testapp = Flask(__name__)
     >>> testapp.register_blueprint(queriesdemo)
     >>> testclient = testapp.test_client()
@@ -134,7 +134,7 @@ def gettestcases():
     * multiple queries
 
     >>> got = testclient.get('/getargs')
-    >>> got.get_data(as_text=True) == repr(ImmutableMultiDict([]))
+    >>> got.get_data(as_text=True) == repr(ImmutableMultiDict())
     True
 
     >>> got = testclient.get('/getargs?x=1')

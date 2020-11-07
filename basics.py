@@ -198,12 +198,21 @@ def getstack(skip=0,ignorelibdir=False):
     appdir = os.path.dirname(os.getcwd())
     libdir = os.path.dirname(os.__file__)
     pkgdir = os.path.join(libdir,'site-packages')
+    pyver = os.path.basename(libdir)
+    vlibdir,vpkgdir = "*","*"
+    if sys.base_exec_prefix != sys.exec_prefix:
+        vlibdir = os.path.join(sys.exec_prefix,'lib',pyver)
+        vpkgdir = os.path.join(sys.exec_prefix,'lib',pyver,'site-packages')
     stack = []
     for path,lineno,funcname,source in traceback.extract_stack():
-        if path.startswith(appdir):
-            path = '$APP' + path[len(appdir):]
+        if path.startswith(vpkgdir):
+            path = '$VSITE' + path[len(vpkgdir):]
+        elif path.startswith(vlibdir):
+            path = '$VLIB' + path[len(vlibdir):]
         elif path.startswith(pkgdir):
             path = '$SITE' + path[len(pkgdir):]
+        elif path.startswith(appdir):
+            path = '$APP' + path[len(appdir):]
         elif path.startswith(libdir):
             if ignorelibdir:
                 continue

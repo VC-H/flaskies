@@ -84,7 +84,7 @@ True
 >>> re.findall('<td>(.*)</td>',context_html)[::2] == [
 ...     '<a href="config/">config</a>', 'cycler', 'dict',
 ...     '<a href="g/">g</a>', 'get_flashed_messages',
-...     'joiner', 'lipsum', 'pancontext',
+...     'joiner', 'lipsum', 'namespace', 'pancontext',
 ...     'range', '<a href="request/">request</a>',
 ...     '<a href="session/">session</a>',
 ...     'url_for'
